@@ -1,0 +1,17 @@
+{
+  "skill_name": "cc-pattern-agent-loop-engineering",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "帮我设计一个 loops，让 agent 每轮改一个超参数、训练 10 分钟、看验证指标，变好就保留，变差就回退。",
+      "expected_output": "Creates a loop spec with state, action allowlist, validator, keep/revert rules, budget, stop conditions, and audit journal.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "这个自动化任务不能无限重试，帮我加状态机、失败重试、停止条件和审计日志规则。",
+      "expected_output": "Defines observe-plan-act-validate-decide-record loop, retry limits, escalation rules, and audit log requirements.",
+      "files": []
+    }
+  ]
+}

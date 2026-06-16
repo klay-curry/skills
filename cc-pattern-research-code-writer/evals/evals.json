@@ -1,0 +1,17 @@
+{
+  "skill_name": "cc-pattern-research-code-writer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "根据 docs/experiment_plan.md 实现一个最小 RAG reranker 实验代码，要求能 smoke test，日志和 metrics 都要落到 runs/。",
+      "expected_output": "Reads the plan, implements minimal runnable experiment code, writes logs/metrics, creates implementation_report.md, and records any issues in code_debug.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "这篇论文的完整框架太复杂，先复现核心 loss 和训练流程。如果你简化任何模块，必须写到文档里。",
+      "expected_output": "Implements the core method, documents every simplification with reason/risk, and verifies the logging and smoke test path.",
+      "files": []
+    }
+  ]
+}

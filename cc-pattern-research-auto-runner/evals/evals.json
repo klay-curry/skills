@@ -1,0 +1,17 @@
+{
+  "skill_name": "cc-pattern-research-auto-runner",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "帮我监控 runs/exp-rag-001 这个训练，定时看日志和 metrics，如果崩了就记录 code_debug 并尽量恢复。",
+      "expected_output": "Runs monitor-mode loop, checks freshness and metrics, records crash details, applies only minimal recovery, and updates loop_state/journal.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "在不改数据集和评估指标的前提下，自动试几组 learning rate 和 batch size，让验证集 F1 更高。",
+      "expected_output": "Uses tune mode with an allowlist, one variable group per trial, fixed budget, keep/revert rule, and a journal of decisions.",
+      "files": []
+    }
+  ]
+}

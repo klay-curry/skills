@@ -1,0 +1,17 @@
+{
+  "skill_name": "cc-bugfix-research-debug-hook",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "训练脚本崩了，帮我把错误记录到 code_debug，后续修复后还要记录修复方式。",
+      "expected_output": "Creates a code_debug record with command, fingerprint, evidence, root-cause placeholders, and later appends fix and verification.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "我想给实验项目加一个失败 hook，只在工具失败或训练崩溃时记录，不要每次成功都写日志。",
+      "expected_output": "Uses the bundled hook script and failure-only hook config, explaining why success hooks are avoided.",
+      "files": []
+    }
+  ]
+}

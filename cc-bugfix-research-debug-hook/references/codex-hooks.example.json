@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUseFailure": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .codex/hooks/research_debug_hook.py --from-hook-json"
+          }
+        ]
+      }
+    ]
+  }
+}

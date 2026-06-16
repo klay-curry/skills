@@ -1,0 +1,17 @@
+{
+  "skill_name": "cc-pattern-research-loop-planner",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "帮我给一个 RAG reranker 实验写实验规划，比较 bge-reranker、cross-encoder 和无 rerank baseline，要求说明数据集、代码结构、日志和图表。",
+      "expected_output": "Creates a reproducible experiment plan with model groups, dataset protocol, code architecture, logging/artifact paths, chart plan, and handoff to code writer.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "我想复现一篇 LoRA 微调论文，但只有一张消费级 GPU，先帮我设计实验技术文档和最小可跑版本。",
+      "expected_output": "Asks only necessary questions or states assumptions, then drafts a plan with compute constraints, smoke subset, baseline/target/ablation groups, and output rules.",
+      "files": []
+    }
+  ]
+}
