@@ -1,0 +1,55 @@
+{
+  "_comment": "self-debugger skill 的 hook 配置示例。粘贴到 <项目>/.claude/settings.json 后，修改 hooks 脚本路径为你项目下的实际路径。事件名以 Claude Code 官方文档为准。",
+  "_usage": [
+    "1. cp hooks.example.json <项目>/.claude/settings.json",
+    "2. 把 .claude/hooks/log-tool-failure.sh 和 inject-lessons.sh 放到项目下",
+    "3. chmod +x .claude/hooks/*.sh",
+    "4. 跑一次错误命令验证 code_debug.md 出现新条目"
+  ],
+
+  "hooks": {
+    "PostToolFailure": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PROJECT_DIR}/.claude/hooks/log-tool-failure.sh"
+          }
+        ]
+      }
+    ],
+
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PROJECT_DIR}/.claude/hooks/inject-lessons.sh"
+          }
+        ]
+      }
+    ],
+
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PROJECT_DIR}/.claude/hooks/summarize-session.sh"
+          }
+        ]
+      }
+    ]
+  },
+
+  "_example_hook_scripts": {
+    "log-tool-failure.sh": "#!/usr/bin/env bash\nset -e\nINPUT=$(cat)\nTOOL=$(echo \"$INPUT\" | jq -r '.tool_name // \"unknown\"')\nERR=$(echo \"$INPUT\" | jq -r '.error // \"unknown\"' | head -c 500)\nCMD=$(echo \"$INPUT\" | jq -r '.tool_input.command // .tool_input.file_path // \"\"' | head -c 200)\nTS=$(date '+%Y-%m-%d %H:%M')\nCODE_DEBUG=\"${CLAUDE_PROJECT_DIR:-.}/code_debug.md\"\n\nCLASS=\"code\"\necho \"$ERR\" | grep -qiE \"OOM|cuda|import\" && CLASS=\"infra\"\necho \"$ERR\" | grep -qiE \"yaml|FileNotFound|KeyError\" && CLASS=\"config\"\necho \"$ERR\" | grep -qiE \"shape|size mismatch\" && CLASS=\"model\"\necho \"$ERR\" | grep -qiE \"DataLoader|BrokenPipe\" && CLASS=\"data\"\n\ncat >> \"$CODE_DEBUG\" <<EOF\n\n### [${TS}] [${CLASS}] [open]\n- 工具: ${TOOL}\n- 输入: \\`${CMD}\\`\n- 错误: \\`${ERR}\\`\nEOF\nexit 0\n",
+
+    "inject-lessons.sh": "#!/usr/bin/env bash\nCODE_DEBUG=\"${CLAUDE_PROJECT_DIR:-.}/code_debug.md\"\n[ -f \"$CODE_DEBUG\" ] || exit 0\n\nLESSONS=$(grep -B1 '\\[open\\]' \"$CODE_DEBUG\" 2>/dev/null | tail -20)\n[ -z \"$LESSONS\" ] && exit 0\n\ncat <<EOF\n## 🧠 self-debugger 提醒（自动注入）\n\n历史未解决问题（最近 5 条）：\n\n${LESSONS}\nEOF\nexit 0\n",
+
+    "summarize-session.sh": "#!/usr/bin/env bash\n# session 结束时把本 session 的最后 N 次失败追加到 code_debug.md\n# （可选 hook，依赖 transcript 路径）\n# 完整实现需要解析 ${CLAUDE_TRANSCRIPT_PATH}\necho \"[$(date '+%Y-%m-%d %H:%M')] session ended\" >> \"${CLAUDE_PROJECT_DIR:-.}/code_debug.md\"\nexit 0\n"
+  }
+}
